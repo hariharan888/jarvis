@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_17_095535) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_18_071238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,11 +34,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_095535) do
 
   create_table "stock_prices", force: :cascade do |t|
     t.bigint "stock_id", null: false
-    t.date "date"
-    t.decimal "open"
-    t.decimal "high"
-    t.decimal "low"
-    t.decimal "close"
+    t.date "date", null: false
+    t.decimal "open", null: false
+    t.decimal "high", null: false
+    t.decimal "low", null: false
+    t.decimal "close", null: false
     t.integer "volume"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -46,11 +46,36 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_095535) do
   end
 
   create_table "stocks", force: :cascade do |t|
-    t.string "name"
-    t.string "ticker"
-    t.string "exchange"
+    t.string "name", null: false
+    t.string "ticker", null: false
+    t.string "exchange", null: false
+    t.string "isin", null: false
+    t.string "company_name", null: false
+    t.integer "bse_code"
+    t.string "nse_code"
+    t.string "sector"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "jti"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["jti"], name: "index_users_on_jti", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "stock_infos", "stocks"
