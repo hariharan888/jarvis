@@ -42,8 +42,10 @@ module Jarvis
     config.api_only = true
 
     # Enabled the session store for api_only application
-    config.session_store :cookie_store, key: '_interslice_session'
+    config.session_store :cookie_store, key: "_interslice_session"
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+    config.action_cable.mount_path = "/cable"
+    config.action_cable.allowed_request_origins = ["http://localhost:3039"]
   end
 end

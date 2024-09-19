@@ -8,6 +8,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable,
          :jwt_authenticatable, jwt_revocation_strategy: self
 
+  has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
+
   validates :name, presence: true
 
   def active_for_authentication?
