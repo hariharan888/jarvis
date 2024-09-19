@@ -13,4 +13,8 @@ class User < ApplicationRecord
   def active_for_authentication?
     super && !discarded?
   end
+
+  def inactive_message
+    "You are not allowed to log in."
+  end
 end

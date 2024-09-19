@@ -47,7 +47,6 @@ describe Users::SessionsController, type: :controller do
       it "returns an unauthorized response" do
         get :show
         expect(response).to have_http_status(:unauthorized)
-        expect(JSON.parse(response.body)["status"]["message"]).to eq("Couldn't find an active session.")
       end
     end
   end

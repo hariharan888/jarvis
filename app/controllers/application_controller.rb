@@ -1,14 +1,14 @@
 class ApplicationController < ActionController::API
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  def current_user
-    if request.headers["Authorization"].present?
-      token = request.headers["Authorization"].split.last
-      payload = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key!).first
+  # def current_user
+  #   if request.headers["Authorization"].present?
+  #     token = request.headers["Authorization"].split.last
+  #     payload = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key!).first
 
-      @current_user ||= User.kept.find_by(id: payload["sub"])
-    end
-  end
+  #     @current_user ||= User.kept.find_by(id: payload["sub"])
+  #   end
+  # end
 
   protected
 
