@@ -35,6 +35,21 @@ describe Users::SessionsController, type: :controller do
         expect(JSON.parse(response.body)["status"]["message"]).to eq("Couldn't find an active session.")
       end
     end
+
+    context "with a discarded user" do
+      let(:discarded_user) { create(:user, discarded_at: Time.current) }
+      let(:discarded_token) { Warden::JWTAuth::UserEncoder.new.call(discarded_user, :user, nil).first }
+
+      before do
+        request.headers["Authorization"] = "Bearer #{discarded_token}"
+      end
+
+      it "returns an unauthorized response" do
+        get :show
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["status"]["message"]).to eq("Couldn't find an active session.")
+      end
+    end
   end
 
   describe "POST #create" do
@@ -55,6 +70,16 @@ describe Users::SessionsController, type: :controller do
 
       it "returns an unauthorized response" do
         post :create, params: invalid_params
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context "with a discarded user" do
+      let(:discarded_user) { create(:user, discarded_at: Time.current) }
+      let(:discarded_params) { { user: { email: discarded_user.email, password: discarded_user.password } } }
+
+      it "returns an unauthorized response" do
+        post :create, params: discarded_params
         expect(response).to have_http_status(:unauthorized)
       end
     end

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
       token = request.headers["Authorization"].split.last
       payload = JWT.decode(token, Rails.application.credentials.devise_jwt_secret_key!).first
 
-      @current_user ||= User.find(payload["sub"])
+      @current_user ||= User.kept.find_by(id: payload["sub"])
     end
   end
 
