@@ -3,6 +3,25 @@
 class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
+  def show
+    if current_user
+      render json: {
+        status: {
+          code: 200,
+          message: "success",
+        },
+        data: UserSerializer.new(current_user).serializable_hash[:data][:attributes],
+      }, status: :ok
+    else
+      render json: {
+        status: {
+          code: 401,
+          message: "Couldn't find an active session.",
+        },
+      }, status: :unauthorized
+    end
+  end
+
   private
 
   def respond_with(resource, _opt = {})
