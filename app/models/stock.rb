@@ -9,6 +9,6 @@ class Stock < ApplicationRecord
   after_create :send_notification
 
   def send_notification
-    NewStockNotifier.with(record: self, title: "Stock: #{self.name} created", message: { data: attributes }).deliver
+    NewStockNotifier.with(record: self, title: "Stock: #{self.name} created", message: { data: attributes }).deliver_later
   end
 end
