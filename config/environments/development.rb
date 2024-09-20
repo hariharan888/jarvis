@@ -75,4 +75,5 @@ Rails.application.configure do
 
   config.action_cable.mount_path = nil
   config.action_cable.url = "ws://localhost:28080"
+  config.log_level = :debug
 end

@@ -47,5 +47,6 @@ module Jarvis
     config.middleware.use config.session_store, config.session_options
     config.action_cable.mount_path = "/cable"
     config.action_cable.allowed_request_origins = ["http://localhost:3039"]
+    config.active_job.queue_adapter = :sidekiq
   end
 end
