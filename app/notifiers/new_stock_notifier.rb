@@ -3,8 +3,8 @@ class NewStockNotifier < ApplicationNotifier
   recipients -> { User.kept }
 
   deliver_by :action_cable do |config|
-    config.channel = "GlobalNotificationChannel"
-    config.stream = "global_notifications"
+    config.channel = "NotificationChannel"
+    config.stream = -> { recipient }
     config.message = -> { params.merge(user_id: recipient.id) }
   end
 end

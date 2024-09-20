@@ -1,6 +1,6 @@
 class NotificationChannel < ApplicationCable::Channel
   def subscribed
-    stream_from current_user
+    stream_for current_user
     logger.debug "User #{current_user.id} subscribed to NotificationChannel"
   end
 
