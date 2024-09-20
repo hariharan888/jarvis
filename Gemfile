@@ -36,6 +36,7 @@ gem "discard", "~> 1.2"
 gem "noticed", "~> 2.4"
 gem "sidekiq"
 gem "redis"
+gem "foreman"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

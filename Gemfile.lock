@@ -117,6 +117,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.6)
@@ -324,6 +325,7 @@ DEPENDENCIES
   discard (~> 1.2)
   factory_bot_rails
   faker
+  foreman
   jsonapi-serializer
   noticed (~> 2.4)
   pg (~> 1.1)
