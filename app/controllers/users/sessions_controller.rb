@@ -10,7 +10,10 @@ class Users::SessionsController < Devise::SessionsController
           code: 200,
           message: "success",
         },
-        data: UserSerializer.new(current_user).serializable_hash[:data][:attributes],
+        data: {
+          token: request.headers["Authorization"].to_s.split(" ").last,
+          user: UserSerializer.new(current_user).serializable_hash[:data][:attributes],
+        },
       }, status: :ok
     else
       render json: {
