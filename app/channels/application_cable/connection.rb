@@ -5,16 +5,38 @@ module ApplicationCable
     def connect
       self.current_user = find_verified_user
       logger.add_tags "ActionCable", "User #{current_user.id}"
+      start_token_expiry_check
+    end
+
+    def disconnect
+      logger.add_tags "ActionCable", "User #{current_user.id} disconnected"
+      stop_token_expiry_check
+    end
+
+    private
+
+    def stop_token_expiry_check
+      @token_expiry_timer&.stop
     end
 
     protected
 
     def find_verified_user
-      if request.params["token"].present?
-        payload = JWT.decode(request.params["token"], Rails.application.credentials.devise_jwt_secret_key!).first
-        User.kept.find_by(id: payload["sub"])
-      else
-        reject_unauthorized_connection
+      reject_unauthorized_connection unless request.params["token"].present?
+
+      user = User.find_by(secondary_token: request.params["token"])
+
+      reject_unauthorized_connection unless user
+
+      user
+    end
+
+    def start_token_expiry_check
+      @token_expiry_timer = periodically(1.minute) do
+        if current_user.secondary_token.nil?
+          logger.info "Token expired for User #{current_user.id}, disconnecting..."
+          close
+        end
       end
     end
   end

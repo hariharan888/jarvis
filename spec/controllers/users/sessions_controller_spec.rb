@@ -20,7 +20,7 @@ describe Users::SessionsController, type: :controller do
         get :show
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)["status"]["message"]).to eq("success")
-        expect(JSON.parse(response.body)["data"]["email"]).to eq(user.email)
+        expect(JSON.parse(response.body)["data"]["user"]["email"]).to eq(user.email)
       end
     end
 
@@ -80,6 +80,37 @@ describe Users::SessionsController, type: :controller do
       it "returns an unauthorized response" do
         post :create, params: discarded_params
         expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
+  describe "POST #generate_token" do
+    let(:user) { create(:user) }
+    let(:token) { Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first }
+
+    context "with a valid token" do
+      before do
+        request.headers["Authorization"] = "Bearer #{token}"
+        sign_in user
+      end
+
+      it "returns a new secondary token" do
+        post :generate_token
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)["status"]["message"]).to eq("success")
+        expect(JSON.parse(response.body)["data"]["token"]).to be_present
+      end
+    end
+
+    context "without a valid token" do
+      before do
+        request.headers["Authorization"] = nil
+      end
+
+      it "returns an unauthorized response" do
+        post :generate_token
+        expect(response).to have_http_status(:unauthorized)
+        expect(JSON.parse(response.body)["status"]["message"]).to eq("Couldn't find an active session.")
       end
     end
   end
