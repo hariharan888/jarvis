@@ -6,5 +6,5 @@
 
 - assets/
 - .rbenv-vars
-- config/master.key
+- config/credentials/development.key
 - tmp/scripts/\*
