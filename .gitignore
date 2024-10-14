@@ -36,3 +36,5 @@ lib/handlers/handler_config.yml
 assets/*
 
 /config/credentials/development.key
+
+/config/credentials/test.key
