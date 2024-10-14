@@ -10,7 +10,33 @@ class Users::SessionsController < Devise::SessionsController
           code: 200,
           message: "success",
         },
-        data: UserSerializer.new(current_user).serializable_hash[:data][:attributes],
+        data: {
+          token: request.headers["Authorization"].to_s.split(" ").last,
+          user: UserSerializer.new(current_user).serializable_hash[:data][:attributes],
+        },
+      }, status: :ok
+    else
+      render json: {
+        status: {
+          code: 401,
+          message: "Couldn't find an active session.",
+        },
+      }, status: :unauthorized
+    end
+  end
+
+  def generate_token
+    if current_user
+      token = current_user.generate_secondary_token
+
+      render json: {
+        status: {
+          code: 200,
+          message: "success",
+        },
+        data: {
+          token:,
+        },
       }, status: :ok
     else
       render json: {
@@ -27,6 +53,7 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(resource, _opt = {})
     @token = request.env["warden-jwt_auth.token"]
     headers["Authorization"] = @token
+    current_user.generate_secondary_token
 
     render json: {
       status: {
@@ -46,6 +73,8 @@ class Users::SessionsController < Devise::SessionsController
                                Rails.application.credentials.devise_jwt_secret_key!).first
 
       current_user = User.find(jwt_payload["sub"])
+      # logout from other services where secondary_token is used
+      current_user.update(secondary_token: nil)
     end
 
     if current_user

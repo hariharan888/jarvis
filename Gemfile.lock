@@ -99,6 +99,7 @@ GEM
     diff-lcs (1.5.1)
     discard (1.3.0)
       activerecord (>= 4.2, < 8)
+    dotenv (3.1.4)
     drb (2.2.1)
     dry-auto_inject (1.0.1)
       dry-core (~> 1.0)
@@ -117,6 +118,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.4.2)
       i18n (>= 1.8.11, < 2)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.6)
@@ -166,6 +168,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
+    noticed (2.4.3)
+      rails (>= 6.1.0)
     orm_adapter (0.5.0)
     parallel (1.26.3)
     parser (3.3.5.0)
@@ -220,6 +224,10 @@ GEM
     rake (13.2.1)
     rdoc (6.7.0)
       psych (>= 4.0.0)
+    redis (5.3.0)
+      redis-client (>= 0.22.0)
+    redis-client (0.22.2)
+      connection_pool
     regexp_parser (2.9.2)
     reline (0.5.10)
       io-console (~> 0.5)
@@ -275,6 +283,12 @@ GEM
     securerandom (0.3.1)
     shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
+    sidekiq (7.3.2)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      logger
+      rack (>= 2.2.4)
+      redis-client (>= 0.22.2)
     stringio (3.1.1)
     thor (1.3.2)
     timeout (0.4.1)
@@ -310,16 +324,21 @@ DEPENDENCIES
   devise
   devise-jwt
   discard (~> 1.2)
+  dotenv
   factory_bot_rails
   faker
+  foreman
   jsonapi-serializer
+  noticed (~> 2.4)
   pg (~> 1.1)
   puma (>= 5.0)
   rack-cors
   rails (~> 7.2.1)
+  redis
   rspec-rails (~> 7.0)
   rubocop-rails-omakase
   shoulda-matchers (~> 6.0)
+  sidekiq
   tzinfo-data
 
 BUNDLED WITH

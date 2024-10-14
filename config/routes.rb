@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get "/me" => "users/sessions#show"
+    post "/me/generate_token" => "users/sessions#generate_token"
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -19,4 +20,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  mount ActionCable.server => "/cable"
 end
